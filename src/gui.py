@@ -215,11 +215,23 @@ class App:
             # Espacio para el encabezado
             pdf.ln(25)
             
+            # Función helper para crear líneas con puntos
+            def create_dotted_line(label, value):
+                pdf.cell(20, 6, '', ln=0)  # Indentación reducida de 40 a 20
+                label_width = pdf.get_string_width(label)
+                dots_width = 60 - label_width  # Ancho total deseado menos el ancho del label
+                num_dots = int(dots_width / pdf.get_string_width('.'))
+                dots = '.' * num_dots
+                pdf.cell(60, 6, f"{label}{dots}", ln=0)
+                # Convertir el valor a mayúsculas
+                value_str = str(value).upper() if value else '--------'
+                pdf.cell(0, 6, value_str, ln=1)
+            
             # Datos del paciente
             pdf.set_font('Times', 'B', 10.5)
             pdf.cell(25, 6, 'PACIENTE:', align='L')
             pdf.cell(3, 6, '', ln=0)  # Pequeño espacio
-            pdf.cell(0, 6, self.entry_nombre.get(), ln=1)
+            pdf.cell(0, 6, self.entry_nombre.get().upper(), ln=1)
             
             pdf.cell(25, 6, 'FECHA:', align='L')
             pdf.cell(3, 6, '', ln=0)  # Pequeño espacio
@@ -233,16 +245,6 @@ class App:
             pdf.ln(4)
             # Examen Macroscópico
             pdf.cell(0, 6, 'EXAMEN MACROSCOPICO:', ln=1)
-            
-            # Función helper para crear líneas con puntos
-            def create_dotted_line(label, value):
-                pdf.cell(20, 6, '', ln=0)  # Indentación reducida de 40 a 20
-                label_width = pdf.get_string_width(label)
-                dots_width = 60 - label_width  # Ancho total deseado menos el ancho del label
-                num_dots = int(dots_width / pdf.get_string_width('.'))
-                dots = '.' * num_dots
-                pdf.cell(60, 6, f"{label}{dots}", ln=0)
-                pdf.cell(0, 6, str(value), ln=1)
             
             # Campos del examen macroscópico
             create_dotted_line('COLOR', valores['color'])
